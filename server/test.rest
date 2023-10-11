@@ -1,0 +1,13 @@
+GET http://localhost:3333/test
+
+###
+POST http://localhost:3333/api/auth/signup
+Content-Type: application/json
+
+{
+    "username": "Pecko",
+    "email": "pecko@gmail.com",
+    "password": "pecko"
+}
+
+###

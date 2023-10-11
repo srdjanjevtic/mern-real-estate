@@ -1,8 +1,10 @@
 import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-dotenv.config();
+import userRouter from "./routes/userRoutes.js";
+import authRouter from "./routes/authRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 3330;
@@ -21,8 +23,7 @@ mongoose
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send("Welcome to real-estate backend");
-});
+app.use("/api/auth", authRouter);
+app.use("/api/test", userRouter);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
