@@ -1,15 +1,18 @@
 import User from "../models/UserModel.js";
 import bcrypt from "bcrypt";
-import asyncHandler from "express-async-handler";
 
-export const signup = asyncHandler(async (req, res) => {
+export const signup = async (req, res, next) => {
   const { username, password, email } = req.body;
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
   const hashedPassword = bcrypt.hashSync(password, salt);
   const newUser = new User({ username, password: hashedPassword, email });
-  await newUser.save();
-  return res
-    .status(201)
-    .json({ message: `User ${username} created successfully` });
-});
+  try {
+    await newUser.save();
+    return res
+      .status(201)
+      .json({ message: `User ${username} created successfully` });
+  } catch (error) {
+    next(error);
+  }
+};

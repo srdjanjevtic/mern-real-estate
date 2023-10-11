@@ -26,4 +26,10 @@ app.use(cors());
 app.use("/api/auth", authRouter);
 app.use("/api/test", userRouter);
 
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  return res.status(statusCode).json({ success: false, statusCode, message });
+});
+
 app.listen(port, () => console.log(`Server running on port ${port}`));
