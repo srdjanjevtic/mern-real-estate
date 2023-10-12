@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BiErrorCircle } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  logInStart,
+  logInSuccess,
+  LogInFailure,
+} from "../redux/user/userSlice";
 
 const LogIn = () => {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   function handleChange(event) {
     setFormData({
@@ -17,8 +23,7 @@ const LogIn = () => {
   async function submitHandler(event) {
     event.preventDefault();
     try {
-      setLoading(true);
-      setError(false);
+      dispatch(logInStart());
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
@@ -28,16 +33,13 @@ const LogIn = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-        setError(data.message);
-        setLoading(false);
+        dispatch(LogInFailure(data.message));
         return;
       }
-      setLoading(false);
-      setError(null);
+      dispatch(logInSuccess(data));
       navigate("/");
     } catch (error) {
-      setLoading(false);
-      setError(error.message);
+      dispatch(LogInFailure(error.message));
     }
   }
 

@@ -33,13 +33,17 @@ export const login = async (req, res, next) => {
       return next(errorHandler(401, "Wrong credentials"));
     }
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const { hashedPassword, ...userInfo } = validUser._doc;
     res
       .cookie("access_token", token, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       })
       .status(200)
-      .json({ message: `User ${validUser.username} is logged in` });
+      .json({
+        message: `User ${validUser.username} is logged in`,
+        userInfo: userInfo,
+      });
   } catch (error) {
     next(error);
   }
