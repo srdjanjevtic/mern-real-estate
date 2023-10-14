@@ -1,7 +1,7 @@
 server/node_modules
 server/.env
 client/node_modules
-client/src/.env
+client/.env
 client/src/firebase.js
 client
 client/firebase_recaptcha_security_key.txt
