@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 firebase_recaptcha_security_key.txt
+
+.env
